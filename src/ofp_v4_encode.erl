@@ -1037,6 +1037,10 @@ table_feature_prop_action_id(Id) when is_atom(Id) ->
 table_feature_prop_field_id({experimenter, Id}) when is_integer(Id) ->
     ExperimenterInt = ofp_v4_enum:to_int(oxm_class, experimenter),
     <<ExperimenterInt:16, 0:7, 0:1, 4:8, Id:32>>;
+table_feature_prop_field_id({Class, Id}) when is_atom(Class),
+                                              is_integer(Id) ->
+    ClassInt = ofp_v4_enum:to_int(oxm_class, Class),
+    <<ClassInt:16, Id:7, 0:1, 0:8>>;
 table_feature_prop_field_id(Id) when is_atom(Id) ->
     ClassInt = ofp_v4_enum:to_int(oxm_class, openflow_basic),
     IdInt = ofp_v4_enum:to_int(oxm_ofb_match_fields, Id),
@@ -1181,5 +1185,3 @@ type_int(#ofp_set_async{}) ->
     ofp_v4_enum:to_int(type, set_async);
 type_int(#ofp_meter_mod{}) ->
     ofp_v4_enum:to_int(type, meter_mod).
-
-
